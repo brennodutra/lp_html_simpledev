@@ -3,6 +3,38 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18223766776"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-18223766776');
+</script>
+<script>
+function gtag_report_conversion(url) {
+  var callback = function () {
+    if (typeof(url) != 'undefined') {
+      window.location = url;
+    }
+  };
+  gtag('event', 'conversion', {
+    'send_to': 'AW-18223766776/-msUCN2kt7scEPi54vFD',
+    'event_callback': callback
+  });
+  return false;
+}
+</script>
+<script>
+(function() {
+  var UTM_KEYS = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','gclid'];
+  var p = new URLSearchParams(window.location.search);
+  UTM_KEYS.forEach(function(k) {
+    var v = p.get(k);
+    if (v) sessionStorage.setItem('_sd_' + k, v);
+  });
+})();
+</script>
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0A203A">
 
@@ -1893,7 +1925,7 @@
 
         <!-- STEP 1 -->
         <div class="form-step active" data-step="1">
-          <div class="form-step-label">Passo 1 de 6</div>
+          <div class="form-step-label">Passo 1 de 7</div>
           <div class="form-step-question">Qual é o seu nome?</div>
           <input type="text" class="form-input" id="f-nome" placeholder="Seu nome completo" autocomplete="name">
           <button class="form-next btn-primary" onclick="nextStep(1)">Continuar →</button>
@@ -1901,7 +1933,7 @@
 
         <!-- STEP 2 -->
         <div class="form-step" data-step="2">
-          <div class="form-step-label">Passo 2 de 6</div>
+          <div class="form-step-label">Passo 2 de 7</div>
           <div class="form-step-question">Qual é o seu email?</div>
           <input type="email" class="form-input" id="f-email" placeholder="seu@email.com" autocomplete="email" inputmode="email" autocapitalize="off" spellcheck="false">
           <button class="form-next btn-primary" onclick="nextStep(2)">Continuar →</button>
@@ -1909,7 +1941,7 @@
 
         <!-- STEP 3 -->
         <div class="form-step" data-step="3">
-          <div class="form-step-label">Passo 3 de 6</div>
+          <div class="form-step-label">Passo 3 de 7</div>
           <div class="form-step-question">Qual é o seu WhatsApp?</div>
           <input type="tel" class="form-input" id="f-whatsapp" placeholder="(00) 00000-0000" autocomplete="tel" inputmode="numeric" maxlength="15">
           <button class="form-next btn-primary" onclick="nextStep(3)">Continuar →</button>
@@ -1917,7 +1949,7 @@
 
         <!-- STEP 4 -->
         <div class="form-step" data-step="4">
-          <div class="form-step-label">Passo 4 de 6</div>
+          <div class="form-step-label">Passo 4 de 7</div>
           <div class="form-step-question">O que melhor descreve o que você precisa?</div>
           <div class="form-options" id="opts4">
             <div class="form-option" onclick="selectOption(this, 'f-situacao')">Quero criar um sistema do zero para o meu negócio</div>
@@ -1931,7 +1963,7 @@
 
         <!-- STEP 5 -->
         <div class="form-step" data-step="5">
-          <div class="form-step-label">Passo 5 de 6</div>
+          <div class="form-step-label">Passo 5 de 7</div>
           <div class="form-step-question">Em que estágio está o projeto hoje?</div>
           <div class="form-options" id="opts5">
             <div class="form-option" onclick="selectOption(this, 'f-estagio')">Só tenho a ideia na cabeça</div>
@@ -1945,7 +1977,7 @@
 
         <!-- STEP 6 -->
         <div class="form-step" data-step="6">
-          <div class="form-step-label">Passo 6 de 6</div>
+          <div class="form-step-label">Passo 6 de 7</div>
           <div class="form-step-question">Quando quer iniciar?</div>
           <div class="form-options" id="opts6">
             <div class="form-option" onclick="selectOption(this, 'f-prazo')">O quanto antes — já tenho urgência</div>
@@ -1954,11 +1986,25 @@
             <div class="form-option" onclick="selectOption(this, 'f-prazo')">Ainda estou avaliando</div>
           </div>
           <input type="hidden" id="f-prazo">
+          <button class="form-next btn-primary" onclick="nextStep(6)" style="margin-top:16px">Continuar →</button>
+        </div>
+
+        <div class="form-step" data-step="7">
+          <div class="form-step-label">Passo 7 de 7</div>
+          <div class="form-step-question">Qual é o seu orçamento para o projeto?</div>
+          <div class="form-options" id="opts7">
+            <div class="form-option" onclick="selectOption(this, 'f-orcamento')">Até R$ 15k</div>
+            <div class="form-option" onclick="selectOption(this, 'f-orcamento')">R$ 15k – R$ 30k</div>
+            <div class="form-option" onclick="selectOption(this, 'f-orcamento')">R$ 30k – R$ 80k</div>
+            <div class="form-option" onclick="selectOption(this, 'f-orcamento')">Acima de R$ 80k</div>
+            <div class="form-option" onclick="selectOption(this, 'f-orcamento')">Não sei ainda</div>
+          </div>
+          <input type="hidden" id="f-orcamento">
           <button class="form-next btn-primary" onclick="submitForm()" style="margin-top:16px">Enviar e falar com especialista →</button>
         </div>
 
         <!-- SUCCESS -->
-        <div class="form-step form-success" data-step="7">
+        <div class="form-step form-success" data-step="8">
           <div class="success-icon">✅</div>
           <div class="form-step-question">Recebemos suas informações!</div>
           <p style="color:var(--white-70);font-size:14px;line-height:1.7;margin:12px 0 28px">Um especialista vai entrar em contato pelo seu WhatsApp em breve. Enquanto isso, você pode iniciar a conversa agora:</p>
@@ -2234,6 +2280,7 @@
     }
     if (step === 4 && !document.getElementById('f-situacao').value) return;
     if (step === 5 && !document.getElementById('f-estagio').value) return;
+    if (step === 6 && !document.getElementById('f-prazo').value) return;
     showStep(step + 1);
   }
 
@@ -2246,12 +2293,13 @@
     parent.querySelectorAll('.form-option').forEach(o => o.classList.remove('selected'));
     el.classList.add('selected');
     document.getElementById(fieldId).value = el.textContent.trim();
-    if (currentStep >= 4 && currentStep <= 5) setTimeout(() => nextStep(currentStep), 120);
-    if (currentStep === 6) setTimeout(() => submitForm(), 120);
+    if (currentStep >= 4 && currentStep <= 6) setTimeout(() => nextStep(currentStep), 120);
+    if (currentStep === 7) setTimeout(() => submitForm(), 120);
   }
 
   async function submitForm() {
     if (!document.getElementById('f-prazo').value) return;
+    if (!document.getElementById('f-orcamento').value) return;
 
     const nome     = document.getElementById('f-nome').value;
     const email    = document.getElementById('f-email').value;
@@ -2261,6 +2309,7 @@
     const situacao = document.getElementById('f-situacao').value;
     const estagio  = document.getElementById('f-estagio').value;
     const prazo    = document.getElementById('f-prazo').value;
+    const orcamento = document.getElementById('f-orcamento').value;
 
     // WhatsApp message (mantém fluxo atual)
     const msg = encodeURIComponent(
@@ -2272,18 +2321,24 @@ em_qual_estágio_você_se_encontra_hoje?: ${estagio}
 quando_você_pretende_iniciar_este_projeto?: ${prazo}
 phone_number: ${phoneNumber}
 este_projeto_está_relacionado_a_que?: Crescimento/Escala do negócio
-qual_dessas_situações_melhor_descreve_o_que_precisa_hoje?: ${situacao}`
+qual_dessas_situações_melhor_descreve_o_que_precisa_hoje?: ${situacao}
+orçamento_estimado: ${orcamento}`
     );
 
     const waUrl = `https://wa.me/556298319260?text=${msg}`;
     document.getElementById('whatsappLink').href = waUrl;
     document.getElementById('progressFill').style.width = '100%';
     document.getElementById('formBack').style.display = 'none';
-    showStep(7);
+    showStep(8);
+    // Google Ads conversion (clique)
+    if (typeof gtag_report_conversion === 'function') {
+      gtag_report_conversion();
+    }
     window.open(waUrl, '_blank');
 
     // ── Webhook ──
     const params   = new URLSearchParams(window.location.search);
+    const ss = key => sessionStorage.getItem('_sd_' + key) || params.get(key) || '';
     const isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
     const ref      = document.referrer || '';
     let referral   = 'Acesso direto';
@@ -2306,6 +2361,7 @@ qual_dessas_situações_melhor_descreve_o_que_precisa_hoje?: ${situacao}`
       necessidade:      situacao,
       estagio,
       inicio:           prazo,
+      orcamento,
       relacao_projeto:  'Crescimento/Escala do negócio',
       Referral_Source:  referral,
       Dispositivo:      isMobile ? 'Mobile' : 'Desktop',
@@ -2316,11 +2372,12 @@ qual_dessas_situações_melhor_descreve_o_que_precisa_hoje?: ${situacao}`
       Pais_do_usuario:  '',
       Regiao_do_usuario: '',
       Cidade_do_usuario: '',
-      utm_source:   params.get('utm_source')   || '',
-      utm_medium:   params.get('utm_medium')   || '',
-      utm_campaign: params.get('utm_campaign') || '',
-      utm_term:     params.get('utm_term')     || '',
-      utm_content:  params.get('utm_content')  || '',
+      utm_source:   ss('utm_source'),
+      utm_medium:   ss('utm_medium'),
+      utm_campaign: ss('utm_campaign'),
+      utm_term:     ss('utm_term'),
+      utm_content:  ss('utm_content'),
+      gclid:        ss('gclid'),
       Id_da_pagina: 3426011,
     };
 
@@ -2334,6 +2391,13 @@ qual_dessas_situações_melhor_descreve_o_que_precisa_hoje?: ${situacao}`
     } catch (_) {}
 
     fetch('https://simpledevs.bubbleapps.io/api/1.1/wf/entrada_leads_v4', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    }).catch(() => {});
+
+    // ── CRM SimpleDEV (novo) ──
+    fetch('https://comercial-simpledev.vercel.app/api/webhook/lead?token=k0R2ndoKKNgj5j2Sl_lk82_ANiB-C2VIHcnJ8KvpuSE', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
