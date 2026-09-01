@@ -2311,6 +2311,13 @@ function gtag_report_conversion(url) {
     const prazo    = document.getElementById('f-prazo').value;
     const orcamento = document.getElementById('f-orcamento').value;
 
+    // Rastreio dentro da mensagem: o WhatsApp nao carrega o gclid sozinho,
+    // entao quem clicou num anuncio do Google chegava no CRM sem atribuicao.
+    // "origem: site" tambem distingue este formulario do formulario
+    // instantaneo da Meta, que gera uma mensagem quase identica.
+    const _gclid = sessionStorage.getItem('_sd_gclid') || '';
+    const rastreio = '\norigem: site' + (_gclid ? '\ngclid: ' + _gclid : '');
+
     // WhatsApp message (mantém fluxo atual)
     const msg = encodeURIComponent(
 `Olá! Preenchi seu formulário e gostaria de saber mais sobre sua empresa.
@@ -2322,7 +2329,7 @@ quando_você_pretende_iniciar_este_projeto?: ${prazo}
 phone_number: ${phoneNumber}
 este_projeto_está_relacionado_a_que?: Crescimento/Escala do negócio
 qual_dessas_situações_melhor_descreve_o_que_precisa_hoje?: ${situacao}
-orçamento_estimado: ${orcamento}`
+orçamento_estimado: ${orcamento}${rastreio}`
     );
 
     const waUrl = `https://wa.me/556298319260?text=${msg}`;
