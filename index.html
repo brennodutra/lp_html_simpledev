@@ -1480,6 +1480,85 @@ function gtag_report_conversion(url) {
     }
   }
 
+  /* ── IA SOB DEMANDA ── */
+  .ai-section {
+    padding: 56px 24px;
+    background: linear-gradient(180deg, var(--navy-mid) 0%, var(--navy) 100%);
+  }
+
+  .ai-proof {
+    margin-top: 32px;
+    padding-top: 28px;
+    border-top: 0.5px solid var(--white-10);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .ai-proof-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--white-40);
+  }
+
+  .ai-proof-logos {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .ai-proof-logo {
+    background: rgba(255,255,255,0.07);
+    border: 0.5px solid var(--white-10);
+    border-radius: 10px;
+    padding: 10px 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Os tres logos tem proporcoes muito diferentes: o de Johnson & Johnson e
+     uma assinatura larga e o da P&G e compacto. Sem o teto de largura, um
+     renderiza a 246px e o outro a 24px na mesma fileira. */
+  .ai-proof-logo img {
+    height: 22px;
+    width: auto;
+    max-width: 132px;
+    object-fit: contain;
+    display: block;
+  }
+
+  .ai-proof-logo.logo-compacto img { height: 32px; }
+
+  /* ── MAPA DE CLIENTES ── */
+  /* O embed do My Maps renderiza no tema claro do Google e nao herda o
+     visual escuro da pagina; a moldura existe para o contraste virar
+     intencional em vez de acidente. */
+  .map-frame {
+    max-width: 1100px;
+    aspect-ratio: 16 / 9;
+    border: 0.5px solid var(--white-10);
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--navy-mid);
+  }
+
+  .map-frame iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+
+  @media (max-width: 768px) {
+    .ai-proof { gap: 14px; }
+    .map-frame { aspect-ratio: 4 / 5; }
+  }
+
   /* ── SELETOR DE IDIOMA ── */
   .nav-actions {
     display: flex;
@@ -1758,6 +1837,48 @@ function gtag_report_conversion(url) {
   </div>
 </section>
 
+<!-- IA SOB DEMANDA -->
+<div class="divider"></div>
+<section class="ai-section" id="ia">
+  <div class="container">
+    <div class="animate">
+      <div class="section-tag" data-i18n="ai.tag">IA sob demanda</div>
+      <h2 class="section-title" data-i18n="ai.title">Intelig&ecirc;ncia artificial constru&iacute;da<br>para a sua <span class="blue">opera&ccedil;&atilde;o</span></h2>
+      <p class="section-sub" data-i18n="ai.sub">N&atilde;o &eacute; IA gen&eacute;rica plugada por fora. &Eacute; modelo, agente e automa&ccedil;&atilde;o desenhados em cima do seu processo &mdash; do mesmo jeito que fazemos software.</p>
+    </div>
+    <div class="cards-grid">
+      <div class="card animate">
+        <div class="card-icon">🧩</div>
+        <div class="card-title" data-i18n="ai.c1t">IA embarcada no sistema</div>
+        <div class="card-text" data-i18n="ai.c1d">A intelig&ecirc;ncia entra dentro do software que constru&iacute;mos, n&atilde;o numa ferramenta &agrave; parte. Seu time n&atilde;o troca de tela para usar.</div>
+      </div>
+      <div class="card animate">
+        <div class="card-icon">🤖</div>
+        <div class="card-title" data-i18n="ai.c2t">Agentes e automa&ccedil;&atilde;o sob medida</div>
+        <div class="card-text" data-i18n="ai.c2d">Agentes e copilotos que rodam dentro da sua opera&ccedil;&atilde;o, treinados nas suas regras de neg&oacute;cio &mdash; n&atilde;o em respostas gen&eacute;ricas.</div>
+      </div>
+      <div class="card animate">
+        <div class="card-icon">📈</div>
+        <div class="card-title" data-i18n="ai.c3t">An&aacute;lise preditiva e dados</div>
+        <div class="card-text" data-i18n="ai.c3d">Modelos que leem performance, projetam cen&aacute;rios e sustentam decis&atilde;o comercial com precis&atilde;o operacional.</div>
+      </div>
+      <div class="card animate">
+        <div class="card-icon">🔬</div>
+        <div class="card-title" data-i18n="ai.c4t">Consultoria e prova de conceito</div>
+        <div class="card-text" data-i18n="ai.c4d">Diagn&oacute;stico de onde a IA realmente cabe no seu neg&oacute;cio e uma prova de conceito antes de voc&ecirc; comprometer or&ccedil;amento grande.</div>
+      </div>
+    </div>
+    <div class="ai-proof animate">
+      <div class="ai-proof-label" data-i18n="ai.proof">IA em produ&ccedil;&atilde;o para opera&ccedil;&otilde;es globais</div>
+      <div class="ai-proof-logos">
+        <div class="ai-proof-logo"><img src="logo-unilever.svg" alt="Unilever" loading="lazy"></div>
+        <div class="ai-proof-logo logo-compacto"><img src="logo-p-g.svg" alt="P&amp;G" loading="lazy"></div>
+        <div class="ai-proof-logo"><img src="johnson-johnson-logo.svg" alt="Johnson &amp; Johnson" loading="lazy"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- CASES -->
 <section class="cases-section" id="cases">
   <div class="container">
@@ -1978,6 +2099,25 @@ function gtag_report_conversion(url) {
         </div>
       </div>
 
+    </div>
+  </div>
+</section>
+
+<!-- MAPA DE CLIENTES -->
+<div class="divider"></div>
+<section class="section" id="mapa">
+  <div class="container">
+    <div class="animate">
+      <div class="section-tag" data-i18n="map.tag">Onde j&aacute; entregamos</div>
+      <h2 class="section-title" data-i18n="map.title">Clientes em <span class="blue">5 pa&iacute;ses</span></h2>
+      <p class="section-sub" data-i18n="map.sub">Cada marcador &eacute; um neg&oacute;cio que colocou tecnologia sob medida para rodar.</p>
+    </div>
+    <div class="map-frame animate">
+      <iframe
+        src="https://www.google.com/maps/d/embed?mid=1oXd-HLtl3vtNREjLNiCwEcUWJWVQt2w&amp;ehbc=0A203A"
+        title="Mapa de clientes SimpleDEV"
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
   </div>
 </section>
@@ -2563,6 +2703,21 @@ orçamento_estimado: ${orcamento}${rastreio}`
   var AUTO_DETECT = true;
 
   var EN = {
+  "ai.tag": "AI on demand",
+  "ai.title": "Artificial intelligence built<br>for your <span class=\"blue\">operation</span>",
+  "ai.sub": "Not generic AI bolted on from the outside. Models, agents and automation designed around your process \u2014 the same way we build software.",
+  "ai.c1t": "AI embedded in the system",
+  "ai.c1d": "The intelligence lives inside the software we build, not in a separate tool. Your team doesn't switch screens to use it.",
+  "ai.c2t": "Custom agents and automation",
+  "ai.c2d": "Agents and copilots that run inside your operation, trained on your business rules \u2014 not on generic answers.",
+  "ai.c3t": "Predictive analysis and data",
+  "ai.c3d": "Models that read performance, project scenarios and support commercial decisions with operational precision.",
+  "ai.c4t": "Consulting and proof of concept",
+  "ai.c4d": "A diagnosis of where AI actually fits your business, and a proof of concept before you commit a large budget.",
+  "ai.proof": "AI in production for global operations",
+  "map.tag": "Where we have delivered",
+  "map.title": "Clients across <span class=\"blue\">5 countries</span>",
+  "map.sub": "Every marker is a business that put custom technology to work.",
   "nav.cta": "Talk to a specialist",
   "hero.tag": "For business owners ready to scale",
   "hero.headline": "Your business deserves<br>a system <span class=\"blue\">built for it.</span>",

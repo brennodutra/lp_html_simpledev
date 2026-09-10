@@ -1,0 +1,6 @@
+# A Vercel nao le o .gitignore — so este arquivo. Sem ele o instalador do
+# Git (65 MB) sobe junto e fica publico em lp.simpledev.com.br.
+Git-2.54.0-64-bit.exe
+
+node_modules/
+.claude/
