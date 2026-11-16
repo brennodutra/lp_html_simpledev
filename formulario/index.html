@@ -269,6 +269,7 @@
     var dig = contato.whatsapp.replace(/\D/g, '');
     return {
       etapa: etapa,
+      parou_em: PASSOS[atual] ? PASSOS[atual].id : '',
       nome: contato.nome,
       email: contato.email,
       whatsapp: dig.startsWith('55') ? '+' + dig : '+55' + dig,
@@ -285,11 +286,15 @@
     };
   }
 
+  // Um envio por vez: o primeiro cria o lead e os seguintes acham o mesmo
+  // lead pelo telefone (dois ao mesmo tempo podiam criar dois cards).
+  var fila = Promise.resolve(null);
   function enviar(etapa, esperar) {
-    var req = fetch(WEBHOOK, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payloadBase(etapa)), keepalive: true,
+    var corpo = JSON.stringify(payloadBase(etapa));
+    var req = fila.then(function () {
+      return fetch(WEBHOOK, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: corpo, keepalive: true });
     });
+    fila = req.then(function () { return null; }, function () { return null; });
     if (!esperar) { req.catch(function () {}); return Promise.resolve(null); }
     var limite = new Promise(function (res) { setTimeout(function () { res(null); }, 7000); });
     return Promise.race([req.then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }), limite]);
@@ -428,7 +433,10 @@
     var prox = atual + 1;
     while (prox < PASSOS.length && PASSOS[prox].quando && !PASSOS[prox].quando(respostas)) prox++;
     if (prox >= PASSOS.length) return finalizar();
+    var anterior = PASSOS[atual].id;
     atual = prox;
+    // Guarda o que ja respondeu: se parar aqui, o bot continua no WhatsApp.
+    if (anterior !== 'contato' && contato.whatsapp) enviar('parcial', false);
     mostrar();
     window.scrollTo(0, 0);
   }
