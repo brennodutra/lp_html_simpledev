@@ -30,13 +30,41 @@ function gtag_report_conversion(url) {
   // gbraid/wbraid sao os identificadores que o Google Ads manda no lugar
   // do gclid em trafego iOS desde o 14.5. Capturar so gclid deixava esse
   // pedaco do trafego sem atribuicao nenhuma.
-  var UTM_KEYS = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','gclid','gbraid','wbraid'];
+  // oppref e o id do clique nos anuncios do ChatGPT (OpenAI).
+  var UTM_KEYS = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','gclid','gbraid','wbraid','oppref'];
   var p = new URLSearchParams(window.location.search);
   UTM_KEYS.forEach(function(k) {
     var v = p.get(k);
     if (v) sessionStorage.setItem('_sd_' + k, v);
   });
 })();
+</script>
+<!-- Pixel de medicao dos anuncios do ChatGPT (OpenAI). Docs:
+     https://developers.openai.com/ads/measurement-pixel
+     O id do pixel vem do Ads Manager > Conversoes. Vazio = pixel desligado. -->
+<script>
+  window.OAI_PIXEL_ID = "";
+  (function (w, d, s, u) {
+    if (!w.OAI_PIXEL_ID) return;
+    if (w.oaiq) return;
+    var q = function () {
+      q.q.push(arguments);
+    };
+    q.q = [];
+    w.oaiq = q;
+    var js = d.createElement(s);
+    js.async = true;
+    js.src = u;
+    var f = d.getElementsByTagName(s)[0];
+    f.parentNode.insertBefore(js, f);
+  })(window, document, "script", "https://bzrcdn.openai.com/sdk/oaiq.min.js");
+  if (window.oaiq) {
+    oaiq("init", { pixelId: window.OAI_PIXEL_ID });
+    oaiq("measure", "page_viewed", {
+      type: "contents",
+      contents: [{ id: "lp", name: "Landing page SimpleDEV", content_type: "page" }],
+    });
+  }
 </script>
 <meta name="robots" content="index, follow">
 <meta name="theme-color" content="#0A203A">
@@ -2512,6 +2540,11 @@ orçamento_estimado: ${orcamento}${rastreio}`
     // popup do mobile derruba a ida pro WhatsApp.
     const params   = new URLSearchParams(window.location.search);
     const ss = key => sessionStorage.getItem('_sd_' + key) || params.get(key) || '';
+    const _cookie = n => {
+      const m = document.cookie.match(new RegExp('(?:^|; )' + n + '=([^;]*)'));
+      return m ? decodeURIComponent(m[1]) : '';
+    };
+    const _oaiEventId = 'lead_' + (window.crypto && crypto.randomUUID ? crypto.randomUUID() : Date.now() + '_' + Math.random().toString(36).slice(2));
     const isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
     const ref      = document.referrer || '';
     let referral   = 'Acesso direto';
@@ -2553,6 +2586,12 @@ orçamento_estimado: ${orcamento}${rastreio}`
       gclid:        ss('gclid'),
       gbraid:       ss('gbraid'),
       wbraid:       ss('wbraid'),
+      // ChatGPT Ads: clique (?oppref=, guardado tambem no cookie __oppref
+      // pelo pixel), navegador (__obref) e o id do evento lead_created, que
+      // o CRM reusa no envio pelo servidor para a OpenAI contar uma vez.
+      oppref:       ss('oppref') || _cookie('__oppref'),
+      obref:        _cookie('__obref'),
+      openai_event_id: _oaiEventId,
       Id_da_pagina: 3426011,
     };
 
@@ -2570,6 +2609,12 @@ orçamento_estimado: ${orcamento}${rastreio}`
     // Google Ads conversion (clique) + ida pro WhatsApp.
     if (typeof gtag_report_conversion === 'function') {
       gtag_report_conversion();
+    }
+    // ChatGPT Ads: lead pelo pixel, com o mesmo id que o CRM usa no servidor.
+    if (window.oaiq) {
+      try {
+        oaiq('measure', 'lead_created', { type: 'customer_action' }, { event_id: _oaiEventId });
+      } catch (_) {}
     }
     window.open(waUrl, '_blank');
 
