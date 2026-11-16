@@ -194,9 +194,11 @@
   // ── Perguntas ────────────────────────────────────────────────────────
   // "quando" decide se a pergunta aparece, olhando as respostas ate ali.
   var EMPRESA = function (r) { return r.para_quem === 'Para a minha empresa, que já funciona'; };
-  var NOVO = function (r) { return r.para_quem === 'Para um negócio que estou abrindo'; };
 
+  // Contato primeiro (o lead ja entra no CRM ai); depois so cliques.
   var PASSOS = [
+    { id: 'contato', tipo: 'contato', titulo: 'Fale com um especialista da SimpleDEV',
+      ajuda: 'Deixe seu contato e responda algumas perguntas rápidas, só com cliques. Leva menos de 1 minuto.' },
     { id: 'para_quem', tipo: 'opcoes', titulo: 'Para quem é o projeto?',
       opcoes: ['Para a minha empresa, que já funciona', 'Para um negócio que estou abrindo', 'Para mim, é uma ideia minha'] },
     { id: 'o_que', tipo: 'opcoes', titulo: 'O que você quer desenvolver?',
@@ -208,20 +210,9 @@
         ['Agente de IA ou atendimento', 'Atendimento, triagem, análise com IA'],
         ['Outro', ''],
       ] },
-    { id: 'descricao', tipo: 'texto', titulo: 'Em uma frase: o que ele precisa fazer?',
-      ajuda: 'Do seu jeito, sem detalhe técnico. Ex.: "controlar pedidos e estoque das 3 lojas num lugar só".',
-      placeholder: 'Escreva aqui…', min: 8 },
-    { id: 'contato', tipo: 'contato', titulo: 'Para quem a gente manda a análise?',
-      ajuda: 'Um especialista fala com você pelo WhatsApp. Faltam poucas perguntas.' },
-    { id: 'segmento', tipo: 'curto', quando: EMPRESA, titulo: 'Qual o segmento da empresa?',
-      placeholder: 'Ex.: clínica, indústria, varejo, logística…', min: 2 },
     { id: 'faturamento', tipo: 'opcoes', quando: EMPRESA, titulo: 'Quanto a empresa fatura por mês, mais ou menos?',
       ajuda: 'Só para dimensionar a conversa. Fica entre a gente.',
       opcoes: ['Até R$ 20 mil', 'R$ 20 a 50 mil', 'R$ 50 a 200 mil', 'R$ 200 mil a 1 milhão', 'Mais de R$ 1 milhão'] },
-    { id: 'pessoas', tipo: 'opcoes', quando: EMPRESA, titulo: 'Quantas pessoas trabalham na empresa?',
-      opcoes: ['1 a 5', '6 a 20', '21 a 100', 'Mais de 100'] },
-    { id: 'financiamento', tipo: 'opcoes', quando: NOVO, titulo: 'De onde vem o investimento do projeto?',
-      opcoes: ['Capital próprio', 'Sócio ou investidor', 'Ainda estou buscando'] },
     { id: 'decisor', tipo: 'opcoes', titulo: 'Quem decide sobre o projeto?',
       opcoes: ['Eu', 'Eu e um sócio', 'Outra pessoa'] },
     { id: 'investimento', tipo: 'opcoes', titulo: 'Quanto você pretende investir no projeto?',
@@ -363,7 +354,7 @@
     } else if (p.tipo === 'contato') {
       var nome = el('input', { id: 'nome', type: 'text', autocomplete: 'name', placeholder: 'Seu nome', maxlength: '80' });
       var wpp = el('input', { id: 'wpp', type: 'tel', inputmode: 'tel', autocomplete: 'tel', placeholder: '(11) 91234-5678', maxlength: '20' });
-      var mail = el('input', { id: 'mail', type: 'email', autocomplete: 'email', placeholder: 'voce@empresa.com.br (opcional)', maxlength: '120' });
+      var mail = el('input', { id: 'mail', type: 'email', autocomplete: 'email', placeholder: 'voce@empresa.com.br', maxlength: '120' });
       nome.value = contato.nome; wpp.value = contato.whatsapp; mail.value = contato.email;
       wpp.addEventListener('input', function () { wpp.value = mascara(wpp.value); });
       [nome, wpp, mail].forEach(function (c) {
@@ -376,7 +367,7 @@
       ]));
       sec.appendChild(erro);
       sec.appendChild(el('div', { class: 'acoes' }, [
-        el('button', { type: 'button', class: 'btn', texto: 'Continuar', onclick: function () { confirmarContato(nome, wpp, mail, erro); } }),
+        el('button', { type: 'button', class: 'btn', texto: 'Começar', onclick: function () { confirmarContato(nome, wpp, mail, erro); } }),
       ]));
       setTimeout(function () { nome.focus(); }, 60);
     }
@@ -402,7 +393,7 @@
     Array.prototype.forEach.call(palco.querySelectorAll('.opcao'), function (b) { b.classList.remove('marcada'); });
     if (botao) botao.classList.add('marcada');
     // Mudar a resposta de cima apaga o que dependia dela.
-    if (p.id === 'para_quem') ['segmento', 'faturamento', 'pessoas', 'financiamento'].forEach(function (k) { delete respostas[k]; });
+    if (p.id === 'para_quem') ['faturamento'].forEach(function (k) { delete respostas[k]; });
     if (p.id === 'investimento' && valor !== 'Ainda não sei') delete respostas.cabe_20k;
     setTimeout(avancar, 220);
   }
@@ -420,7 +411,7 @@
     var e = mail.value.trim();
     if (n.length < 2) { erro.textContent = 'Qual é o seu nome?'; nome.focus(); return; }
     if (d.length < 10 || d.length > 13) { erro.textContent = 'Confira o WhatsApp com DDD.'; wpp.focus(); return; }
-    if (e && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) { erro.textContent = 'Esse e-mail parece incompleto.'; mail.focus(); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) { erro.textContent = e ? 'Esse e-mail parece incompleto.' : 'Qual é o seu e-mail?'; mail.focus(); return; }
     var primeiraVez = !contato.whatsapp;
     contato = { nome: n, whatsapp: d, email: e };
     // Lead parcial ja vai para o CRM: se a pessoa parar aqui, o time chama.
@@ -476,10 +467,7 @@
       contato.email ? 'work_email: ' + contato.email : '',
       'para_quem_e_o_projeto: ' + (r.para_quem || ''),
       'o_que_quer_desenvolver: ' + (r.o_que || ''),
-      'o_que_precisa_fazer: ' + (r.descricao || ''),
-      r.segmento ? 'segmento: ' + r.segmento : '',
       r.faturamento ? 'faturamento_mensal: ' + r.faturamento : '',
-      r.financiamento ? 'de_onde_vem_o_investimento: ' + r.financiamento : '',
       'quem_decide: ' + (r.decisor || ''),
       'investimento_previsto: ' + (r.investimento || '') + (r.cabe_20k ? ' (' + r.cabe_20k + ')' : ''),
       'quando_pretende_comecar: ' + (r.prazo || ''),
