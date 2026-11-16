@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Conte sobre seu projeto — SimpleDEV</title>
+<meta name="description" content="Responda algumas perguntas rápidas e um especialista da SimpleDEV fala com você pelo WhatsApp.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0A203A">
+<link rel="icon" href="/simpledev-logo.svg">
+
+<!-- Google Ads (mesma tag da landing page) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18223766776"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-18223766776');
+</script>
+
+<!-- Rastreio: guarda UTMs e identificadores de clique (Google, ChatGPT) -->
+<script>
+(function () {
+  var KEYS = ['utm_source','utm_medium','utm_campaign','utm_term','utm_content','gclid','gbraid','wbraid','oppref'];
+  var p = new URLSearchParams(window.location.search);
+  // Navegador com armazenamento bloqueado (aba anonima, app embutido)
+  // lanca erro ao tocar no sessionStorage: o formulario nao pode travar.
+  try { KEYS.forEach(function (k) { var v = p.get(k); if (v) sessionStorage.setItem('_sd_' + k, v); }); } catch (_) {}
+})();
+</script>
+
+<!-- Pixel dos anuncios do ChatGPT (OpenAI): https://developers.openai.com/ads/measurement-pixel -->
+<script>
+  window.OAI_PIXEL_ID = "SRdZb4PWt9XUpxdsQtTQwe";
+  (function (w, d, s, u) {
+    if (!w.OAI_PIXEL_ID) return;
+    if (w.oaiq) return;
+    var q = function () {
+      q.q.push(arguments);
+    };
+    q.q = [];
+    w.oaiq = q;
+    var js = d.createElement(s);
+    js.async = true;
+    js.src = u;
+    var f = d.getElementsByTagName(s)[0];
+    f.parentNode.insertBefore(js, f);
+  })(window, document, "script", "https://bzrcdn.openai.com/sdk/oaiq.min.js");
+  if (window.oaiq) {
+    oaiq("init", { pixelId: window.OAI_PIXEL_ID });
+    oaiq("measure", "page_viewed", {
+      type: "contents",
+      contents: [{ id: "formulario", name: "Formulário SimpleDEV", content_type: "page" }],
+    });
+  }
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --navy: #0A203A;
+    --navy-mid: #0f2a4a;
+    --navy-light: #163E6D;
+    --blue: #00B2FF;
+    --blue-light: #AFEFFF;
+    --white: #FFFFFF;
+    --white-70: rgba(255,255,255,0.72);
+    --white-40: rgba(255,255,255,0.45);
+    --white-10: rgba(255,255,255,0.08);
+    --blue-10: rgba(0,178,255,0.10);
+    --blue-20: rgba(0,178,255,0.22);
+    --erro: #FF8A8A;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Mulish', system-ui, -apple-system, Segoe UI, sans-serif;
+    background: radial-gradient(1200px 600px at 80% -10%, var(--navy-light) 0%, var(--navy) 55%) fixed, var(--navy);
+    color: var(--white);
+    -webkit-font-smoothing: antialiased;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .topo {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding: 18px 20px 0; max-width: 640px; width: 100%; margin: 0 auto;
+  }
+  .topo img { height: 26px; display: block; }
+  .confianca { font-size: 12px; color: var(--white-40); text-align: right; line-height: 1.35; }
+  .confianca b { color: var(--white-70); font-weight: 700; }
+
+  .barra { max-width: 640px; width: calc(100% - 40px); margin: 18px auto 0; height: 4px; border-radius: 4px; background: var(--white-10); overflow: hidden; }
+  .barra > i { display: block; height: 100%; width: 0; background: var(--blue); border-radius: 4px; transition: width .35s ease; }
+
+  main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 28px 20px 40px; }
+  .passo { width: 100%; max-width: 640px; display: none; animation: entra .35s ease both; }
+  .passo.ativo { display: block; }
+  @keyframes entra { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+  .num { font-size: 13px; font-weight: 700; color: var(--blue); letter-spacing: .5px; margin-bottom: 10px; }
+  h1 { font-size: clamp(24px, 5vw, 34px); line-height: 1.18; font-weight: 900; letter-spacing: -.5px; text-wrap: balance; }
+  .ajuda { margin-top: 10px; color: var(--white-70); font-size: 16px; line-height: 1.5; max-width: 56ch; }
+
+  .opcoes { margin-top: 24px; display: grid; gap: 10px; }
+  .opcao {
+    display: flex; align-items: center; gap: 14px; width: 100%; text-align: left;
+    background: var(--white-10); border: 1px solid rgba(255,255,255,0.12); color: var(--white);
+    border-radius: 12px; padding: 14px 16px; font: inherit; font-size: 16px; font-weight: 600; cursor: pointer;
+    transition: background .15s, border-color .15s, transform .1s;
+  }
+  .opcao:hover { background: var(--blue-10); border-color: var(--blue-20); }
+  .opcao:active { transform: scale(.99); }
+  .opcao:focus-visible, .btn:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+  .opcao.marcada { background: var(--blue-20); border-color: var(--blue); }
+  .tecla {
+    flex: none; width: 26px; height: 26px; border-radius: 6px; display: grid; place-items: center;
+    border: 1px solid rgba(255,255,255,0.25); font-size: 12px; font-weight: 900; color: var(--white-70);
+  }
+  .opcao.marcada .tecla { background: var(--blue); border-color: var(--blue); color: var(--navy); }
+  .opcao small { display: block; font-weight: 400; color: var(--white-70); font-size: 13px; margin-top: 2px; }
+
+  .campos { margin-top: 24px; display: grid; gap: 14px; }
+  label { display: block; font-size: 13px; font-weight: 700; color: var(--white-70); margin-bottom: 6px; }
+  input, textarea {
+    width: 100%; font: inherit; font-size: 17px; color: var(--white);
+    background: transparent; border: none; border-bottom: 2px solid rgba(255,255,255,0.25);
+    padding: 10px 2px; border-radius: 0; transition: border-color .15s;
+  }
+  textarea { resize: none; min-height: 84px; line-height: 1.45; }
+  input::placeholder, textarea::placeholder { color: var(--white-40); }
+  input:focus, textarea:focus { outline: none; border-bottom-color: var(--blue); }
+  .erro { color: var(--erro); font-size: 13px; margin-top: 10px; min-height: 18px; }
+
+  .acoes { margin-top: 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .btn {
+    background: var(--blue); color: var(--navy); border: none; border-radius: 8px; cursor: pointer;
+    font: inherit; font-size: 14px; font-weight: 900; letter-spacing: 1px; text-transform: uppercase;
+    padding: 15px 26px; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;
+    transition: filter .15s, transform .1s;
+  }
+  .btn:hover { filter: brightness(1.08); }
+  .btn:active { transform: scale(.98); }
+  .btn[disabled] { opacity: .6; cursor: default; }
+  .dica { font-size: 12px; color: var(--white-40); }
+  .voltar {
+    background: none; border: none; color: var(--white-40); font: inherit; font-size: 14px; cursor: pointer;
+    padding: 6px 0; margin-top: 18px;
+  }
+  .voltar:hover { color: var(--white-70); }
+
+  .fim { text-align: left; }
+  .fim .selo {
+    width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; margin-bottom: 18px;
+    background: var(--blue-20); color: var(--blue); font-size: 26px; font-weight: 900;
+  }
+  .fim .selo.neutro { background: var(--white-10); color: var(--white-70); }
+
+  .rodape { text-align: center; font-size: 12px; color: var(--white-40); padding: 0 20px 22px; }
+
+  @media (max-width: 480px) {
+    .confianca { display: none; }
+    .opcao { padding: 13px 14px; font-size: 15px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .passo { animation: none; }
+    .barra > i { transition: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topo">
+  <a href="https://lp.simpledev.com.br/" aria-label="SimpleDEV"><img src="/simpledev-logo.svg" alt="SimpleDEV"></a>
+  <div class="confianca"><b>+200 projetos entregues</b><br>Unilever · Johnson &amp; Johnson · Petz</div>
+</header>
+<div class="barra" aria-hidden="true"><i id="progresso"></i></div>
+
+<main id="palco" aria-live="polite"></main>
+
+<p class="rodape">Seus dados ficam só com a SimpleDEV. Assinamos NDA antes de você detalhar o projeto.</p>
+
+<script>
+(function () {
+  // ── Configuracao ─────────────────────────────────────────────────────
+  var WEBHOOK = 'https://comercial-simpledev.vercel.app/api/webhook/formulario?token=k0R2ndoKKNgj5j2Sl_lk82_ANiB-C2VIHcnJ8KvpuSE';
+  var WHATSAPP = '556298319260';
+  var PISO = 'Os projetos da SimpleDEV começam a partir de R$ 20 mil.';
+
+  // ── Perguntas ────────────────────────────────────────────────────────
+  // "quando" decide se a pergunta aparece, olhando as respostas ate ali.
+  var EMPRESA = function (r) { return r.para_quem === 'Para a minha empresa, que já funciona'; };
+  var NOVO = function (r) { return r.para_quem === 'Para um negócio que estou abrindo'; };
+
+  var PASSOS = [
+    { id: 'para_quem', tipo: 'opcoes', titulo: 'Para quem é o projeto?',
+      opcoes: ['Para a minha empresa, que já funciona', 'Para um negócio que estou abrindo', 'Para mim, é uma ideia minha'] },
+    { id: 'o_que', tipo: 'opcoes', titulo: 'O que você quer desenvolver?',
+      opcoes: [
+        ['Sistema de gestão', 'ERP, CRM, controle interno'],
+        ['Automação ou integração', 'Tirar tarefa manual, ligar sistemas'],
+        ['Aplicativo para clientes', 'App ou portal que seu cliente usa'],
+        ['Plataforma ou SaaS para vender', 'Produto digital com assinatura'],
+        ['Agente de IA ou atendimento', 'Atendimento, triagem, análise com IA'],
+        ['Outro', ''],
+      ] },
+    { id: 'descricao', tipo: 'texto', titulo: 'Em uma frase: o que ele precisa fazer?',
+      ajuda: 'Do seu jeito, sem detalhe técnico. Ex.: "controlar pedidos e estoque das 3 lojas num lugar só".',
+      placeholder: 'Escreva aqui…', min: 8 },
+    { id: 'contato', tipo: 'contato', titulo: 'Para quem a gente manda a análise?',
+      ajuda: 'Um especialista fala com você pelo WhatsApp. Faltam poucas perguntas.' },
+    { id: 'segmento', tipo: 'curto', quando: EMPRESA, titulo: 'Qual o segmento da empresa?',
+      placeholder: 'Ex.: clínica, indústria, varejo, logística…', min: 2 },
+    { id: 'faturamento', tipo: 'opcoes', quando: EMPRESA, titulo: 'Quanto a empresa fatura por mês, mais ou menos?',
+      ajuda: 'Só para dimensionar a conversa. Fica entre a gente.',
+      opcoes: ['Até R$ 20 mil', 'R$ 20 a 50 mil', 'R$ 50 a 200 mil', 'R$ 200 mil a 1 milhão', 'Mais de R$ 1 milhão'] },
+    { id: 'pessoas', tipo: 'opcoes', quando: EMPRESA, titulo: 'Quantas pessoas trabalham na empresa?',
+      opcoes: ['1 a 5', '6 a 20', '21 a 100', 'Mais de 100'] },
+    { id: 'financiamento', tipo: 'opcoes', quando: NOVO, titulo: 'De onde vem o investimento do projeto?',
+      opcoes: ['Capital próprio', 'Sócio ou investidor', 'Ainda estou buscando'] },
+    { id: 'decisor', tipo: 'opcoes', titulo: 'Quem decide sobre o projeto?',
+      opcoes: ['Eu', 'Eu e um sócio', 'Outra pessoa'] },
+    { id: 'investimento', tipo: 'opcoes', titulo: 'Quanto você pretende investir no projeto?',
+      opcoes: ['Até R$ 10 mil', 'R$ 10 a 20 mil', 'R$ 20 a 50 mil', 'R$ 50 a 100 mil', 'Mais de R$ 100 mil', 'Ainda não sei'] },
+    { id: 'cabe_20k', tipo: 'opcoes', quando: function (r) { return r.investimento === 'Ainda não sei'; },
+      titulo: PISO + ' Isso cabe no que você está planejando?',
+      opcoes: ['Sim, cabe', 'Agora não'] },
+    { id: 'prazo', tipo: 'opcoes', titulo: 'Em quanto tempo você pretende começar esse projeto?',
+      opcoes: ['O quanto antes', 'Em até 30 dias', 'Em até 3 meses', 'Mais de 3 meses'] },
+  ];
+
+  // Mesma regra do CRM (o servidor e quem decide; esta e a reserva se a
+  // resposta dele nao chegar).
+  function avaliar(r) {
+    var semValor = r.investimento === 'Até R$ 10 mil' || r.investimento === 'R$ 10 a 20 mil' ||
+      r.cabe_20k === 'Agora não' ||
+      (r.faturamento === 'Até R$ 20 mil' && (r.investimento === 'Ainda não sei' || !r.investimento));
+    if (semValor) return 'desqualificado';
+    if (r.prazo === 'Mais de 3 meses') return 'longo_prazo';
+    return 'qualificado';
+  }
+
+  // ── Estado ───────────────────────────────────────────────────────────
+  var respostas = {};
+  var contato = { nome: '', whatsapp: '', email: '' };
+  var historico = [];
+  var atual = 0;
+  var eventoLead = 'lead_' + (window.crypto && crypto.randomUUID ? crypto.randomUUID() : Date.now() + '_' + Math.random().toString(36).slice(2));
+  var palco = document.getElementById('palco');
+
+  var ss = function (k) {
+    var v = '';
+    try { v = sessionStorage.getItem('_sd_' + k) || ''; } catch (_) {}
+    return v || new URLSearchParams(location.search).get(k) || '';
+  };
+  var cookie = function (n) {
+    try { var m = document.cookie.match(new RegExp('(?:^|; )' + n + '=([^;]*)')); return m ? decodeURIComponent(m[1]) : ''; } catch (_) { return ''; }
+  };
+  var LETRAS = 'ABCDEFGHI';
+
+  function visiveis() { return PASSOS.filter(function (p) { return !p.quando || p.quando(respostas); }); }
+
+  function medir(nome, opcoes) {
+    if (!window.oaiq) return;
+    try {
+      if (nome === 'lead_created') oaiq('measure', 'lead_created', { type: 'customer_action' }, opcoes || {});
+      else oaiq('measure', 'custom', { type: 'custom' }, { custom_event_name: nome });
+    } catch (_) {}
+  }
+
+  function payloadBase(etapa) {
+    var mobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
+    var dig = contato.whatsapp.replace(/\D/g, '');
+    return {
+      etapa: etapa,
+      nome: contato.nome,
+      email: contato.email,
+      whatsapp: dig.startsWith('55') ? '+' + dig : '+55' + dig,
+      respostas: respostas,
+      Referral_Source: document.referrer || 'Acesso direto',
+      Dispositivo: mobile ? 'Mobile' : 'Desktop',
+      URL: location.href,
+      utm_source: ss('utm_source'), utm_medium: ss('utm_medium'), utm_campaign: ss('utm_campaign'),
+      utm_term: ss('utm_term'), utm_content: ss('utm_content'),
+      gclid: ss('gclid'), gbraid: ss('gbraid'), wbraid: ss('wbraid'),
+      oppref: ss('oppref') || cookie('__oppref'),
+      obref: cookie('__obref'),
+      openai_event_id: eventoLead,
+    };
+  }
+
+  function enviar(etapa, esperar) {
+    var req = fetch(WEBHOOK, {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payloadBase(etapa)), keepalive: true,
+    });
+    if (!esperar) { req.catch(function () {}); return Promise.resolve(null); }
+    var limite = new Promise(function (res) { setTimeout(function () { res(null); }, 7000); });
+    return Promise.race([req.then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }), limite]);
+  }
+
+  // ── Telas ────────────────────────────────────────────────────────────
+  function progresso() {
+    var lista = visiveis();
+    var i = lista.indexOf(PASSOS[atual]);
+    document.getElementById('progresso').style.width = Math.round(((i < 0 ? lista.length : i) / lista.length) * 100) + '%';
+  }
+
+  function el(tag, attrs, filhos) {
+    var e = document.createElement(tag);
+    Object.keys(attrs || {}).forEach(function (k) {
+      if (k === 'texto') e.textContent = attrs[k];
+      else if (k.slice(0, 2) === 'on') e.addEventListener(k.slice(2), attrs[k]);
+      else e.setAttribute(k, attrs[k]);
+    });
+    (filhos || []).forEach(function (f) { if (f) e.appendChild(f); });
+    return e;
+  }
+
+  function mostrar() {
+    var p = PASSOS[atual];
+    var lista = visiveis();
+    var n = lista.indexOf(p) + 1;
+    palco.innerHTML = '';
+    var sec = el('section', { class: 'passo ativo' });
+    sec.appendChild(el('div', { class: 'num', texto: n + ' de ' + lista.length }));
+    sec.appendChild(el('h1', { texto: p.titulo }));
+    if (p.ajuda) sec.appendChild(el('p', { class: 'ajuda', texto: p.ajuda }));
+    var erro = el('div', { class: 'erro', role: 'alert' });
+
+    if (p.tipo === 'opcoes') {
+      var box = el('div', { class: 'opcoes', role: 'list' });
+      p.opcoes.forEach(function (o, i) {
+        var rotulo = Array.isArray(o) ? o[0] : o;
+        var sub = Array.isArray(o) ? o[1] : '';
+        var b = el('button', { type: 'button', class: 'opcao' + (respostas[p.id] === rotulo ? ' marcada' : ''), 'data-tecla': LETRAS[i],
+          onclick: function () { escolher(p, rotulo, b); } }, [
+          el('span', { class: 'tecla', texto: LETRAS[i] }),
+          el('span', {}, [document.createTextNode(rotulo), sub ? el('small', { texto: sub }) : null]),
+        ]);
+        box.appendChild(b);
+      });
+      sec.appendChild(box);
+    } else if (p.tipo === 'texto' || p.tipo === 'curto') {
+      var campo = p.tipo === 'texto'
+        ? el('textarea', { id: 'campo', rows: '3', maxlength: '300', placeholder: p.placeholder || '' })
+        : el('input', { id: 'campo', type: 'text', maxlength: '80', placeholder: p.placeholder || '', autocomplete: 'off' });
+      campo.value = respostas[p.id] || '';
+      campo.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); confirmarTexto(p, campo, erro); }
+      });
+      sec.appendChild(el('div', { class: 'campos' }, [campo]));
+      sec.appendChild(erro);
+      sec.appendChild(el('div', { class: 'acoes' }, [
+        el('button', { type: 'button', class: 'btn', texto: 'Continuar', onclick: function () { confirmarTexto(p, campo, erro); } }),
+        el('span', { class: 'dica', texto: 'ou aperte Enter ↵' }),
+      ]));
+      setTimeout(function () { campo.focus(); }, 60);
+    } else if (p.tipo === 'contato') {
+      var nome = el('input', { id: 'nome', type: 'text', autocomplete: 'name', placeholder: 'Seu nome', maxlength: '80' });
+      var wpp = el('input', { id: 'wpp', type: 'tel', inputmode: 'tel', autocomplete: 'tel', placeholder: '(11) 91234-5678', maxlength: '20' });
+      var mail = el('input', { id: 'mail', type: 'email', autocomplete: 'email', placeholder: 'voce@empresa.com.br (opcional)', maxlength: '120' });
+      nome.value = contato.nome; wpp.value = contato.whatsapp; mail.value = contato.email;
+      wpp.addEventListener('input', function () { wpp.value = mascara(wpp.value); });
+      [nome, wpp, mail].forEach(function (c) {
+        c.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); confirmarContato(nome, wpp, mail, erro); } });
+      });
+      sec.appendChild(el('div', { class: 'campos' }, [
+        el('div', {}, [el('label', { for: 'nome', texto: 'Nome' }), nome]),
+        el('div', {}, [el('label', { for: 'wpp', texto: 'WhatsApp' }), wpp]),
+        el('div', {}, [el('label', { for: 'mail', texto: 'E-mail' }), mail]),
+      ]));
+      sec.appendChild(erro);
+      sec.appendChild(el('div', { class: 'acoes' }, [
+        el('button', { type: 'button', class: 'btn', texto: 'Continuar', onclick: function () { confirmarContato(nome, wpp, mail, erro); } }),
+      ]));
+      setTimeout(function () { nome.focus(); }, 60);
+    }
+
+    if (historico.length) {
+      sec.appendChild(el('button', { type: 'button', class: 'voltar', texto: '← Voltar', onclick: voltar }));
+    }
+    palco.appendChild(sec);
+    progresso();
+  }
+
+  function mascara(v) {
+    var d = v.replace(/\D/g, '').slice(0, 13);
+    if (d.startsWith('55') && d.length > 11) d = d.slice(2);
+    if (d.length <= 2) return d;
+    if (d.length <= 6) return '(' + d.slice(0, 2) + ') ' + d.slice(2);
+    if (d.length <= 10) return '(' + d.slice(0, 2) + ') ' + d.slice(2, 6) + '-' + d.slice(6);
+    return '(' + d.slice(0, 2) + ') ' + d.slice(2, 7) + '-' + d.slice(7, 11);
+  }
+
+  function escolher(p, valor, botao) {
+    respostas[p.id] = valor;
+    Array.prototype.forEach.call(palco.querySelectorAll('.opcao'), function (b) { b.classList.remove('marcada'); });
+    if (botao) botao.classList.add('marcada');
+    // Mudar a resposta de cima apaga o que dependia dela.
+    if (p.id === 'para_quem') ['segmento', 'faturamento', 'pessoas', 'financiamento'].forEach(function (k) { delete respostas[k]; });
+    if (p.id === 'investimento' && valor !== 'Ainda não sei') delete respostas.cabe_20k;
+    setTimeout(avancar, 220);
+  }
+
+  function confirmarTexto(p, campo, erro) {
+    var v = campo.value.trim();
+    if (v.length < (p.min || 1)) { erro.textContent = 'Conta um pouco mais, em poucas palavras.'; campo.focus(); return; }
+    respostas[p.id] = v;
+    avancar();
+  }
+
+  function confirmarContato(nome, wpp, mail, erro) {
+    var n = nome.value.trim();
+    var d = wpp.value.replace(/\D/g, '');
+    var e = mail.value.trim();
+    if (n.length < 2) { erro.textContent = 'Qual é o seu nome?'; nome.focus(); return; }
+    if (d.length < 10 || d.length > 13) { erro.textContent = 'Confira o WhatsApp com DDD.'; wpp.focus(); return; }
+    if (e && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)) { erro.textContent = 'Esse e-mail parece incompleto.'; mail.focus(); return; }
+    var primeiraVez = !contato.whatsapp;
+    contato = { nome: n, whatsapp: d, email: e };
+    // Lead parcial ja vai para o CRM: se a pessoa parar aqui, o time chama.
+    enviar('contato', false);
+    if (primeiraVez) medir('lead_created', { event_id: eventoLead });
+    avancar();
+  }
+
+  function avancar() {
+    historico.push(atual);
+    medir('form_' + PASSOS[atual].id);
+    var prox = atual + 1;
+    while (prox < PASSOS.length && PASSOS[prox].quando && !PASSOS[prox].quando(respostas)) prox++;
+    if (prox >= PASSOS.length) return finalizar();
+    atual = prox;
+    mostrar();
+    window.scrollTo(0, 0);
+  }
+
+  function voltar() {
+    if (!historico.length) return;
+    atual = historico.pop();
+    mostrar();
+  }
+
+  // ── Final ────────────────────────────────────────────────────────────
+  function finalizar() {
+    document.getElementById('progresso').style.width = '100%';
+    palco.innerHTML = '';
+    var sec = el('section', { class: 'passo ativo fim' }, [
+      el('div', { class: 'selo neutro', texto: '…' }),
+      el('h1', { texto: 'Só um instante…' }),
+    ]);
+    palco.appendChild(sec);
+
+    enviar('final', true).then(function (r) {
+      var resultado = (r && r.resultado) || avaliar(respostas);
+      medir('form_concluido_' + resultado);
+      if (resultado === 'desqualificado') return telaSemValor();
+      if (typeof gtag === 'function') {
+        gtag('event', 'conversion', { send_to: 'AW-18223766776/-msUCN2kt7scEPi54vFD' });
+      }
+      telaWhatsApp(resultado);
+    });
+  }
+
+  function mensagemWhatsApp() {
+    var r = respostas;
+    var linhas = [
+      'Olá! Preenchi o formulário da SimpleDEV e gostaria de falar com um especialista.',
+      '',
+      'full_name: ' + contato.nome,
+      contato.email ? 'work_email: ' + contato.email : '',
+      'para_quem_e_o_projeto: ' + (r.para_quem || ''),
+      'o_que_quer_desenvolver: ' + (r.o_que || ''),
+      'o_que_precisa_fazer: ' + (r.descricao || ''),
+      r.segmento ? 'segmento: ' + r.segmento : '',
+      r.faturamento ? 'faturamento_mensal: ' + r.faturamento : '',
+      r.financiamento ? 'de_onde_vem_o_investimento: ' + r.financiamento : '',
+      'quem_decide: ' + (r.decisor || ''),
+      'investimento_previsto: ' + (r.investimento || '') + (r.cabe_20k ? ' (' + r.cabe_20k + ')' : ''),
+      'quando_pretende_comecar: ' + (r.prazo || ''),
+      'origem: site',
+    ].filter(Boolean);
+    var clique = ['gclid', 'gbraid', 'wbraid'].map(function (k) { return [k, ss(k)]; }).filter(function (x) { return x[1]; });
+    clique.forEach(function (x) { linhas.push(x[0] + ': ' + x[1]); });
+    return 'https://wa.me/' + WHATSAPP + '?text=' + encodeURIComponent(linhas.join('\n'));
+  }
+
+  function telaWhatsApp(resultado) {
+    var url = mensagemWhatsApp();
+    palco.innerHTML = '';
+    palco.appendChild(el('section', { class: 'passo ativo fim' }, [
+      el('div', { class: 'selo', texto: '✓' }),
+      el('h1', { texto: 'Recebido, ' + contato.nome.split(' ')[0] + '!' }),
+      el('p', { class: 'ajuda', texto: resultado === 'longo_prazo'
+        ? 'Anotamos tudo. Abra o WhatsApp para falar com o nosso time e deixar a conversa encaminhada para quando for a hora.'
+        : 'O Ronaldo, do nosso time, vai continuar com você pelo WhatsApp e entender o projeto antes da conversa com o especialista.' }),
+      el('div', { class: 'acoes' }, [
+        el('a', { class: 'btn', href: url, target: '_blank', rel: 'noopener', texto: 'Abrir o WhatsApp' }),
+      ]),
+    ]));
+  }
+
+  function telaSemValor() {
+    palco.innerHTML = '';
+    palco.appendChild(el('section', { class: 'passo ativo fim' }, [
+      el('div', { class: 'selo neutro', texto: '✓' }),
+      el('h1', { texto: 'Obrigado, ' + contato.nome.split(' ')[0] + '.' }),
+      el('p', { class: 'ajuda', texto: PISO + ' Pelo que você contou, talvez não seja o momento. Quando fizer sentido, é só voltar aqui que a gente conversa.' }),
+    ]));
+  }
+
+  // Teclado: A, B, C… escolhem a opcao da tela atual.
+  document.addEventListener('keydown', function (e) {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.metaKey || e.ctrlKey || e.altKey) return;
+    var b = palco.querySelector('.opcao[data-tecla="' + e.key.toUpperCase() + '"]');
+    if (b) b.click();
+  });
+
+  mostrar();
+})();
+</script>
+</body>
+</html>
