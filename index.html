@@ -2461,8 +2461,48 @@ function gtag_report_conversion(url) {
     return true;
   }
 
+
+  // ChatGPT Ads: dados de quem preenche, com hash SHA-256 feito aqui no
+  // navegador, para o pixel casar a conversao. A OpenAI pede isso no
+  // oaiq("init"), nao no "measure". Normalizacao igual a do CRM
+  // (lib/openai/conversions.ts): se mudar la, muda aqui.
+  async function _oaiHashUsuario(nome, email, telefone) {
+    if (!window.crypto || !crypto.subtle) return null;
+    const hex = async (t) => {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(t));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    };
+    const user = {};
+    const e = (email || '').trim().toLowerCase();
+    if (e.includes('@')) user.email_sha256 = await hex(e);
+    // Numero com "+" ja traz o DDI; sem ele, 10 ou 11 digitos e Brasil.
+    const temDdi = /^\s*\+/.test(telefone || '');
+    let t = (telefone || '').replace(/\D/g, '').replace(/^0+/, '');
+    if (!temDdi && (t.length === 10 || t.length === 11)) t = '55' + t;
+    if (t.length >= 8 && t.length <= 15) user.phone_number_sha256 = await hex(t);
+    const partes = (nome || '').trim().split(/\s+/)
+      .map(p => p.normalize('NFC').toLowerCase().replace(/[\s!-/:-@[-`{-~]/g, ''))
+      .filter(Boolean);
+    if (partes.length) user.first_name_sha256 = await hex(partes[0]);
+    if (partes.length > 1) user.last_name_sha256 = await hex(partes[partes.length - 1]);
+    return Object.keys(user).length ? user : null;
+  }
+
+  // Calculado quando o passo de contato (nome, e-mail, WhatsApp) e validado:
+  // no envio o hash ja esta pronto, sem atrasar a ida pro WhatsApp, que
+  // precisa ser sincrona.
+  let _oaiUser = null;
+  function _oaiPrepararUsuario() {
+    _oaiHashUsuario(
+      document.getElementById('f-nome').value,
+      document.getElementById('f-email').value,
+      document.getElementById('f-whatsapp').value
+    ).then(u => { if (u) _oaiUser = u; }).catch(() => {});
+  }
+
   function nextStep(step) {
     if (step !== currentStep || step >= totalSteps || !validateStep(step)) return;
+    if (step === 1) _oaiPrepararUsuario();
     showStep(step + 1);
   }
 
@@ -2613,6 +2653,7 @@ orçamento_estimado: ${orcamento}${rastreio}`
     // ChatGPT Ads: lead pelo pixel, com o mesmo id que o CRM usa no servidor.
     if (window.oaiq) {
       try {
+        if (_oaiUser) oaiq('init', { pixelId: window.OAI_PIXEL_ID, user: _oaiUser });
         oaiq('measure', 'lead_created', { type: 'customer_action' }, { event_id: _oaiEventId });
       } catch (_) {}
     }

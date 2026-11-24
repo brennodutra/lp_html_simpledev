@@ -256,6 +256,32 @@
 
   function visiveis() { return PASSOS.filter(function (p) { return !p.quando || p.quando(respostas); }); }
 
+  // ChatGPT Ads: dados de quem preenche, com hash SHA-256 feito aqui no
+  // navegador, para o pixel casar a conversao. A OpenAI pede isso no
+  // oaiq("init"), nao no "measure". Normalizacao igual a do CRM
+  // (lib/openai/conversions.ts): se mudar la, muda aqui.
+  async function hashUsuario(nome, email, telefone) {
+    if (!window.crypto || !crypto.subtle) return null;
+    var hex = async (t) => {
+      var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(t));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    };
+    var user = {};
+    var e = (email || '').trim().toLowerCase();
+    if (e.includes('@')) user.email_sha256 = await hex(e);
+    // Numero com "+" ja traz o DDI; sem ele, 10 ou 11 digitos e Brasil.
+    var temDdi = /^\s*\+/.test(telefone || '');
+    var t = (telefone || '').replace(/\D/g, '').replace(/^0+/, '');
+    if (!temDdi && (t.length === 10 || t.length === 11)) t = '55' + t;
+    if (t.length >= 8 && t.length <= 15) user.phone_number_sha256 = await hex(t);
+    var partes = (nome || '').trim().split(/\s+/)
+      .map(p => p.normalize('NFC').toLowerCase().replace(/[\s!-/:-@[-`{-~]/g, ''))
+      .filter(Boolean);
+    if (partes.length) user.first_name_sha256 = await hex(partes[0]);
+    if (partes.length > 1) user.last_name_sha256 = await hex(partes[partes.length - 1]);
+    return Object.keys(user).length ? user : null;
+  }
+
   function medir(nome, opcoes) {
     if (!window.oaiq) return;
     try {
@@ -423,7 +449,14 @@
     contato = { nome: n, whatsapp: d, email: e };
     // Lead parcial ja vai para o CRM: se a pessoa parar aqui, o time chama.
     enviar('contato', false);
-    if (primeiraVez) medir('lead_created', { event_id: eventoLead });
+    // Com os dados em hash no "init" antes do lead_created; sem crypto (ou se
+    // o hash falhar) o evento sai do mesmo jeito.
+    if (primeiraVez) {
+      hashUsuario(n, e, d).catch(function () { return null; }).then(function (u) {
+        if (u && window.oaiq) { try { oaiq('init', { pixelId: window.OAI_PIXEL_ID, user: u }); } catch (_) {} }
+        medir('lead_created', { event_id: eventoLead });
+      });
+    }
     avancar();
   }
 
